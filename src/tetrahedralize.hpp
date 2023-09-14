@@ -32,10 +32,8 @@ namespace wildmeshing_binding
             double epsilon, double edge_length_r,
             bool skip_simplify, bool coarsen);
 
-    private:
-        void set_num_threads(int num_threads);
-
     public:
+        void set_num_threads(int num_threads);
         void set_log_level(int level);
 
         bool boolean_operation(const std::string &json_string);
