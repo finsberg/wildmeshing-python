@@ -20,6 +20,7 @@
 
 #ifdef FLOAT_TETWILD_USE_TBB
 #include <tbb/task_scheduler_init.h>
+#include <tbb/global_control.h>
 #include <thread>
 #endif
 
@@ -66,6 +67,8 @@ namespace wildmeshing_binding
         // params.num_threads = num_threads;
         std::cout << "TBB threads " << num_threads << std::endl;
         tbb::task_scheduler_init scheduler(num_threads, stack_size);
+        tbb::global_control global_limit(tbb::global_control::max_allowed_parallelism, num_threads);
+
 #endif
         set_num_threads(num_threads);
     }
