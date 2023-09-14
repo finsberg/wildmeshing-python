@@ -28,12 +28,14 @@ namespace wildmeshing_binding
         bool has_json_csg = false;
 
         Tetrahedralizer(
-            double stop_quality, int max_its, int stage, int stop_p,
+            double stop_quality, int max_its, int stage, int stop_p, int num_threads,
             double epsilon, double edge_length_r,
             bool skip_simplify, bool coarsen);
+            
+    private:
+        void set_num_threads(int num_threads);
 
     public:
-        void set_num_threads(int num_threads);
         void set_log_level(int level);
 
         bool boolean_operation(const std::string &json_string);
