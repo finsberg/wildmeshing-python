@@ -68,7 +68,7 @@ jobs:
 
       - name: Build (Debug)
         if: matrix.config == 'Debug'
-        run: python -m pip install -v --debug .
+        run: python -m pip install -v --install-option="--debug" .
 
       - name: Build (Release)
         if: matrix.config == 'Release'
