@@ -79,6 +79,7 @@ jobs:
           python test/tri_test.py
           python test/small_tet_test.py
 
+
       - name: Slow Tests
         if: matrix.config == 'Release'
         run: |
