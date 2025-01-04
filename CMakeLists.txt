@@ -23,7 +23,7 @@ include(Warnings)
 
 # Use C++11/14
 include(CXXFeatures)
-set(CMAKE_CXX_STANDARD 11) # C++11...
+set(CMAKE_CXX_STANDARD 14) # C++14...
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Sort projects inside the solution
