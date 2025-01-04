@@ -23,6 +23,8 @@ include(Warnings)
 
 # Use C++11/14
 include(CXXFeatures)
+set(CMAKE_CXX_STANDARD 11) # C++11...
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Sort projects inside the solution
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
