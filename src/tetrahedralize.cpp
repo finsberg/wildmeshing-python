@@ -9,6 +9,7 @@
 #include <floattetwild/TriangleInsertion.h>
 #include <floattetwild/CSGTreeParser.hpp>
 #include <floattetwild/MshLoader.h>
+#include <Eigen/Dense>
 
 #include <floattetwild/Logger.hpp>
 
