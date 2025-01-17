@@ -23,7 +23,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-22.04, macOS-13, macos-13-arm64, windows-2019]
+        os: [ubuntu-22.04, macOS-13, macOS-14, windows-2019]
         python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
         config: [Debug, Release]
         include:
@@ -32,9 +32,9 @@ jobs:
           - os: windows-2019
             name: Windows
           - os: macos-13
-            name: macOS
-          - os: macos-13-arm64
-            name: macOS ARM64
+            name: macOS-13
+          - os: macos-14
+            name: macOS-14 ARM64
             
     steps:
       - name: Checkout repository
