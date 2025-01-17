@@ -24,7 +24,6 @@
 #endif
 
 using namespace floatTetWild;
-using namespace Eigen;
 
 namespace wildmeshing_binding
 {
