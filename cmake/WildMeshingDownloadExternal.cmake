@@ -33,7 +33,7 @@ endfunction()
 function(wildmeshing_download_tetwild)
     wildmeshing_download_project(tetwild
         GIT_REPOSITORY  https://github.com/MariusCausemann/fTetWild.git
-        GIT_TAG         5120c3ec2135b45bd2365fc200ab34c7e9d3fb19
+        GIT_TAG         0f1d0998d9b0ddc29424765660251e8ce06bb35f
     )
 endfunction()
 
