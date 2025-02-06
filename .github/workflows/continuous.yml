@@ -69,6 +69,10 @@ jobs:
       - name: Configure git
         run: git config --global http.version HTTP/1.1
 
+      - name: Configure ssl certificate
+        if : runner.os == 'Windows'
+        run: git config --global http.sslBackend schannel
+
       - name: Build (Debug)
         if: matrix.config == 'Debug'
         run: python -m pip install -v --config-settings="--build-option=build_ext" --config-settings="--build-option=--debug"  .
