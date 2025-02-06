@@ -51,7 +51,7 @@ jobs:
           activate-environment: test-env
 
       - name: Install Dependencies
-        run: python3 -m pip numpy svgwrite cmake
+        run: python3 -m pip install numpy svgwrite cmake
 
       - name: Install Dependencies  (Windows)
         if: runner.os == 'Windows'
