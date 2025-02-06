@@ -1,0 +1,110 @@
+name: Wheels
+
+on:
+  workflow_dispatch:
+    inputs:
+      overrideVersion:
+        description: Manually force a version
+  release:
+    types:
+      - published
+  pull_request:
+    paths:
+      - .github/workflows/wheels.yml
+
+concurrency:
+  group: wheels-${{ github.head_ref }}
+  cancel-in-progress: true
+
+env:
+  SETUPTOOLS_SCM_PRETEND_VERSION: ${{ github.event.inputs.overrideVersion }}
+
+jobs:
+  build_sdist:
+    name: Build SDist
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: true
+
+      - name: Build SDist
+        run: pipx run build --sdist
+
+      - name: Check metadata
+        run: pipx run twine check --strict dist/*.tar.gz
+
+      - uses: actions/upload-artifact@v4
+        with:
+          path: dist/*
+          name: wheels-sdist
+
+  build_wheels:
+    name: ${{ matrix.build }} ${{ matrix.arch }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-13
+            arch: auto64
+            build: "*"
+
+          - os: macos-14
+            arch: auto64
+            build: "*"
+
+          - os: windows-2019
+            arch: auto64
+            build: "cp*"
+
+          - os: windows-2019
+            arch: auto64
+            build: "pp*"
+
+          - os: windows-2019
+            arch: auto32
+            build: "*"
+
+          - os: ubuntu-latest
+            arch: auto64
+            build: "*manylinux*"
+
+          - os: ubuntu-latest
+            arch: auto64
+            build: "*musllinux*"
+
+          - os: ubuntu-24.04-arm
+            arch: auto64
+            build: "*manylinux*"
+
+          - os: ubuntu-24.04-arm
+            arch: auto64
+            build: "*musllinux*"
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: true
+
+      - uses: astral-sh/setup-uv@v5
+
+      - uses: actions/setup-python@v5
+
+      - uses: pypa/cibuildwheel@v2.22
+        env:
+          CIBW_BUILD: ${{ matrix.build }}
+          CIBW_ARCHS: ${{ matrix.arch }}
+
+      - name: Verify clean directory
+        run: git diff --exit-code
+        shell: bash
+
+      - name: Upload wheels
+        uses: actions/upload-artifact@v4
+        with:
+          path: wheelhouse/*.whl
+          name: wheels-${{ strategy.job-index }}
+
