@@ -1,6 +1,7 @@
 import os
 import re
 import sys
+import shlex
 # import sysconfig
 import platform
 import subprocess
@@ -38,8 +39,10 @@ class CMakeBuild(build_ext):
         extdir = os.path.join(os.path.abspath(os.path.dirname(
             self.get_ext_fullpath(ext.name))), "wildmeshing")
 
-        cmake_args = ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + extdir,
+        cmake_args = shlex.split(os.environ.get("CMAKE_ARGS", ""))
+        cmake_args += ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + extdir,
                       '-DPYTHON_EXECUTABLE=' + sys.executable,
+                      '-DTBB_BUILD_TESTS=OFF', '-DTBB_TEST=OFF'
                       ]
 
         cfg = 'Debug' if self.debug else 'Release'
@@ -49,12 +52,8 @@ class CMakeBuild(build_ext):
         if platform.system() == "Windows":
             cmake_args += [
                 '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}'.format(cfg.upper(), extdir)]
-            if os.environ.get('CMAKE_GENERATOR') != "NMake Makefiles":
-                if sys.maxsize > 2**32:
-                    cmake_args += ['-A', 'x64']
-                build_args += ['--', '/m']
         else:
-            build_args += ['--', '-j2']
+            build_args += ['--', '-j1']
 
         env = os.environ.copy()
         env['CXXFLAGS'] = '{} -DVERSION_INFO=\\"{}\\"'.format(

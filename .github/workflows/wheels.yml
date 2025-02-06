@@ -1,31 +1,26 @@
-name: Build
+name: Wheels
 
 on:
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
-
-env:
-  CTEST_OUTPUT_ON_FAILURE: ON
-  CTEST_PARALLEL_LEVEL: 2
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: "Tag name"
+        type: string
 
 defaults:
   run:
     shell: bash -el {0}
 
 jobs:
-  Build:
-    name: ${{ matrix.name }} (${{ matrix.config }})
+  build-wheels:
+    name: ${{ matrix.name }} on ${{ matrix.os }} with Python ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-22.04, macOS-13, macOS-14, windows-2019]
         python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
-        config: [Debug, Release]
+       
         include:
           - os: ubuntu-22.04
             name: Linux
@@ -56,7 +51,7 @@ jobs:
           activate-environment: test-env
 
       - name: Install Dependencies
-        run: conda install numpy svgwrite cmake git -y
+        run: python3 -m pip numpy svgwrite cmake
 
       - name: Install Dependencies  (Windows)
         if: runner.os == 'Windows'
@@ -68,26 +63,24 @@ jobs:
 
       - name: Configure git
         run: git config --global http.version HTTP/1.1
-
+    
       - name: Configure ssl certificate
         if : runner.os == 'Windows'
         run: git config --global http.sslBackend schannel
+    
+      - name: Install build
+        run: python -m pip install build
 
-      - name: Build (Debug)
-        if: matrix.config == 'Debug'
-        run: python -m pip install -v --config-settings="--build-option=build_ext" --config-settings="--build-option=--debug"  .
+      - name: Build wheel
+        run: python -m build -w
 
-      - name: Build (Release)
-        if: matrix.config == 'Release'
-        run: python -m pip install -v .
+      - name: Upload wheels
+        uses: actions/upload-artifact@v4
+        with:
+          path: dist/*.whl
 
-      - name: Fast Tests
-        run: |
-          python test/tri_test.py
-          python test/small_tet_test.py
-
-
-      - name: Slow Tests
-        if: matrix.config == 'Release'
-        run: |
-          python test/tet_test.py
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: wildmeshing-*.whl
+          tag_name: ${{ github.event.inputs.tag_name }}

@@ -36,14 +36,14 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 # Setup dependencies
 include(WildMeshingDependencies)
 
-# triwild
-wildmeshing_download_triwild()
-add_subdirectory(${THIRD_PARTY_DIR}/triwild)
-
-
 # tetwild
 wildmeshing_download_tetwild()
 add_subdirectory(${THIRD_PARTY_DIR}/tetwild)
+
+
+# triwild
+wildmeshing_download_triwild()
+add_subdirectory(${THIRD_PARTY_DIR}/triwild)
 
 
 # pybind11
