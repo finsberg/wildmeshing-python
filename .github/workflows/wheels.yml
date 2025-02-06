@@ -60,28 +60,17 @@ jobs:
             build: "cp*"
 
           - os: windows-2019
-            arch: auto64
-            build: "pp*"
-
-          - os: windows-2019
             arch: auto32
             build: "*"
 
-          - os: ubuntu-latest
-            arch: auto64
-            build: "*manylinux*"
-
-          - os: ubuntu-latest
-            arch: auto64
-            build: "*musllinux*"
-
-          - os: ubuntu-24.04-arm
+          - os: ubuntu-24.04
             arch: auto64
             build: "*manylinux*"
 
           - os: ubuntu-24.04-arm
             arch: auto64
-            build: "*musllinux*"
+            build: "*manylinux*"
+
 
     steps:
       - uses: actions/checkout@v4
