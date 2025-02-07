@@ -22,15 +22,17 @@ jobs:
           - os: ubuntu-22.04
             name: Linux
             arch: "manylinux_x86_64"
+            mac_version: "0"
             
           - os: macos-13
             name: macOS-13
             arch: "macosx_x86_64"
+            mac_version: "13.0"
 
           - os: macos-14
             name: macOS-14 ARM64
             arch: "macosx_arm64"
-
+            mac_version: "14.0"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -46,9 +48,9 @@ jobs:
       - name: Build wheels
         run: python -m cibuildwheel --output-dir wheelhouse
         env:
-          CIBW_BEFORE_ALL_LINUX: apt-get install libmpfr-dev libgmp-dev libboost-all-dev cmake
+          CIBW_BEFORE_ALL_LINUX: yum install libmpfr-dev libgmp-dev libboost-all-dev cmake
           CIBW_BUILD: ${{ matrix.python-version }}-${{ matrix.arch }}
-          MACOSX_DEPLOYMENT_TARGET: "13.0"
+          MACOSX_DEPLOYMENT_TARGET: ${{ matrix.mac_version }}
 
       - name: Upload wheels
         uses: actions/upload-artifact@v4
