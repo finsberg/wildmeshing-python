@@ -48,7 +48,7 @@ jobs:
       - name: Build wheels
         run: python -m cibuildwheel --output-dir wheelhouse
         env:
-          CIBW_BEFORE_ALL_LINUX: yum install gmp-static cmake
+          CIBW_BEFORE_ALL_LINUX: yum install -y gmp-static cmake
           CIBW_BUILD: ${{ matrix.python-version }}-${{ matrix.arch }}
           MACOSX_DEPLOYMENT_TARGET: ${{ matrix.mac_version }}
 
