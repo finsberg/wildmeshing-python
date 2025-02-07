@@ -82,7 +82,7 @@ setup(
     description="WildMeshing Bindings",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="todo",
+    url="https://wildmeshing.github.io",
     ext_modules=[CMakeExtension('wildmeshing')],
     cmdclass=dict(build_ext=CMakeBuild),
     packages=find_packages(),
