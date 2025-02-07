@@ -22,17 +22,14 @@ jobs:
           - os: ubuntu-22.04
             name: Linux
             arch: "manylinux_x86_64"
-            before: "apt-get install libmpfr-dev libgmp-dev libboost-all-dev cmake"
             
           - os: macos-13
             name: macOS-13
             arch: "macosx_x86_64"
-            before: ""
 
           - os: macos-14
             name: macOS-14 ARM64
             arch: "macosx_arm64"
-            before: ""
 
     steps:
       - name: Checkout repository
@@ -49,7 +46,7 @@ jobs:
       - name: Build wheels
         run: python -m cibuildwheel --output-dir wheelhouse
         env:
-          CIBW_BEFORE_ALL: ${{ matrix.before }}
+          CIBW_BEFORE_ALL_LINUX: apt-get install libmpfr-dev libgmp-dev libboost-all-dev cmake
           CIBW_BUILD: ${{ matrix.python-version }}-${{ matrix.arch }}
           MACOSX_DEPLOYMENT_TARGET: "13.0"
 
