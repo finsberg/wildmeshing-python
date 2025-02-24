@@ -76,7 +76,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="wildmeshing",
-    version="0.4",
+    version="0.4.0",
     author="Teseo Schneider",
     author_email="",
     description="WildMeshing Bindings",
@@ -93,8 +93,8 @@ setup(
     python_requires='>=3.8',
     install_requires=[
         'svgwrite',
-        'numpy',
-        'argparse'],
+        'numpy'
+    ],
     entry_points={
         'console_scripts': [
             'wm_tetrahedralize = wildmeshing.runners:tetrahedralize',
